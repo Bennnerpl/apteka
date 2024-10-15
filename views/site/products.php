@@ -9,20 +9,23 @@ use yii\bootstrap5\Breadcrumbs;
 use app\widgets\Alert;
 $this->title = 'Товары';
 $this->params['breadcrumbs'][] = $this->title;
+/* @var $model Products */
+/* @var $provider  */
 ?>
-<?php
-$dataProvider = new ActiveDataProvider([
-'query' => Products::find(),
-'pagination' => [
-'pageSize' => 20,
-],
-]);
 
-echo ListView::widget([
-'dataProvider' => $dataProvider,
-'itemView' => '_products',
-]);
-?>
+        <?php
+
+        echo ListView::widget([
+            'dataProvider' => $provider,
+            'itemView' => '_products',
+            'options' => [
+                    'tag' => 'div',
+                'class' => 'row row-cols-1 row-cols-sm-4 g-3',
+
+            ],
+            'summary' => '',
+        ]);
+        ?>
 <script>
     jQuery(document).ready(function ($) {
         $( 'body' ).on( 'click', 'button.plus, button.minus', function() {

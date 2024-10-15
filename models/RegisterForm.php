@@ -79,7 +79,8 @@ use yii\db\ActiveRecord;
 class RegisterForm extends ActiveRecord
 {
 
-    public function rules(){
+    public function rules()
+    {
         return [
             [['fio', 'email'], 'required'],
             [['fio', 'email'], 'string', 'max' => 255],
@@ -92,7 +93,8 @@ class RegisterForm extends ActiveRecord
     {
         return 'users';
     }
-        public function getUser()
+
+    public function getUser()
     {
         if ($this->_user === false) {
             $this->_user = Users::find()->where(['email' => $this->email])->one();

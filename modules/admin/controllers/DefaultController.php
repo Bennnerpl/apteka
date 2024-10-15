@@ -22,6 +22,7 @@ class DefaultController extends Controller
     {
         return $this->render('users/index');
     }
+
     public function actionOrders()
     {
         return $this->render('orders/index');

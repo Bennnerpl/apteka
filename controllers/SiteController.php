@@ -16,6 +16,7 @@ use app\models\LoginForm;
 use app\models\ContactForm;
 use app\models\Products;
 use yii\data\ActiveDataProvider;
+
 class SiteController extends Controller
 
 {
@@ -106,64 +107,44 @@ class SiteController extends Controller
     }
 
     /**
-     * Displays contact page.
-     *
-     * @return Response|string
-     */
-    public function actionContact()
-    {
-        $model = new ContactForm();
-        if ($model->load(Yii::$app->request->post()) && $model->contact(Yii::$app->params['adminEmail'])) {
-            Yii::$app->session->setFlash('contactFormSubmitted');
-            return $this->refresh();
-        }
-        return $this->render('contact', [
-            'model' => $model,
-        ]);
-    }
-
-    /**
      * Displays about page.
      *
      * @return string
      */
-    public function actionAbout()
+    public function actionProducts()
     {
-        return $this->render('about');
+        $query = Products::find();
+        $provider = new ActiveDataProvider([
+          'query' => $query,
+          'pagination' => [
+              'pageSize' => 10,
+          ],
+
+      ]);
+        return $this->render('products', ['provider' => $provider]);
     }
-    public function actionProducts() {
-        $dataProvider = Products::find()->all();
-        return $this->render('products', ['dataProvider' => $dataProvider]);
-    }
-    public function actionProduct($id) {
+
+    public function actionProduct($id)
+    {
         $product = Products::findOne($id);
         return $this->render('product', ['product' => $product]);
 
     }
-    public function actionCart() {
+
+    public function actionCart()
+    {
         $cart = Yii::$app->session->get('cart', []);
         return $this->render('cart', ['cart' => $cart]);
     }
-    public function actionCheckout() {
+
+    public function actionCheckout()
+    {
         $checkout = new Orders();
-        return $this->render('checkout', ['checkout'=> $checkout]);
+        return $this->render('checkout', ['checkout' => $checkout]);
     }
+
     public function actionRegister()
     {
-//        if (!Yii::$app->user->isGuest) {
-//            return $this->goBack();
-//        }
-//        Yii::$app->response->cookies->add(new \yii\web\Cookie([
-//            'name' => 'language',
-//            'value' => 'zh-CN',
-//        ]));
-//        $model = new RegisterForm();
-//        if ($model->load(Yii::$app->request->post()) && $model->register()) {
-//            return $this->goBack();
-//        }
-//        return $this->render('register', [
-//            'model' => $model,
-//        ]);
         if (!Yii::$app->user->isGuest) {
             return $this->goBack();
         }
@@ -184,20 +165,4 @@ class SiteController extends Controller
         }
     }
 
-    /**
-     * @throws Exception
-     */
-    public function actionOrder()
-    {
-        $model = new Orders();
-//        $modelItems = new OrderItems();
-        if ($model->load(Yii::$app->request->post(), '') && $model->save()) {
-            Yii::$app->getSession()->setFlash('success');
-            return $this->redirect(['index']);
-        } else {
-            return $this->render('checkout', [
-                'model' => $model,
-            ]);
-        }
-    }
 }

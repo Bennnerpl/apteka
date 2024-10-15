@@ -1,4 +1,6 @@
 <?php
+global $model;
+
 use yii\helpers\Html;
 use yii\helpers\HtmlPurifier;
 use yii\helpers\Url;
@@ -6,16 +8,11 @@ use yii\widgets\ActiveForm;
 use yii\bootstrap5\Breadcrumbs;
 use app\widgets\Alert;
 ?>
-
-    <div class="container px-4 px-lg-5 mt-5">
-        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-
-            <div class="col mb-5">
+            <div class="col">
                 <div class="card h-100">
                     <img class="card-img-top" src="woocommerce-placeholder.png" alt="">
                     <div class="card-body text-center">
                         <a href="<?= Url::to(['product', 'id' => $model['id']]); ?>" class="h4 text-primary text-decoration-none"><?php echo Html::encode($model->name) ?></a>
-<!--                      <p class="h4 text-primary text-decoration-none">--><?php //echo Html::encode($model->name_world) ?><!--</p>-->
                         <div class="product-price">
                                 <span class="text-muted">Цена <?php echo Html::encode($model->price) ?></span>
                         </div>
@@ -35,8 +32,6 @@ use app\widgets\Alert;
                 </div>
             </div>
 
-        </div>
-    </div>
 <style>
     .quantity {
     display: flex;

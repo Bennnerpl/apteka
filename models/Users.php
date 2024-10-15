@@ -23,13 +23,15 @@ class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     public const ROLE_ADMIN = 2;
     public $authKey;
     public $accessToken;
+
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-      return 'users';
+        return 'users';
     }
+
     public function getId()
     {
         return $this->id;
@@ -39,6 +41,7 @@ class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     {
         return isset(self::$users[$id]) ? new static(self::$users[$id]) : null;
     }
+
     public static function findIdentityByAccessToken($token, $type = null)
     {
         foreach (self::$users as $user) {
@@ -49,18 +52,23 @@ class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 
         return null;
     }
+
     public function getAuthKey()
     {
         return $this->authKey;
     }
+
     public function validateAuthKey($authKey)
     {
         return $this->authKey === $authKey;
     }
-    public function setPassword ($password) {
+
+    public function setPassword($password)
+    {
 
         return sha1($password);
     }
+
     public function validatePassword($password)
     {
         return $this->password === sha1($password);
@@ -69,8 +77,9 @@ class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 
     public static function findByEmail($email)
     {
-        return static::find()->where('email=:email', [":email"=>$email])->one();
+        return static::find()->where('email=:email', [":email" => $email])->one();
     }
+
     /**
      * {@inheritdoc}
      */
@@ -101,6 +110,7 @@ class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             'accessToken' => 'Access Token',
         ];
     }
+
     public static function findByFio($fio)
     {
         foreach (self::$users as $user) {
@@ -111,6 +121,7 @@ class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 
         return null;
     }
+
     /**
      * Gets query for [[Orders]].
      *
