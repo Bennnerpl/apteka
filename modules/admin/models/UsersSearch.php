@@ -45,10 +45,10 @@ class UsersSearch extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'fio' => 'Fio',
-            'email' => 'Email',
-            'password' => 'Password',
-            'role' => 'Role',
+            'fio' => 'Имя',
+            'email' => 'Почта',
+            'password' => 'Пароль',
+            'role' => 'Роль',
         ];
     }
 

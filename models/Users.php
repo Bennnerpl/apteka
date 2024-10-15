@@ -3,6 +3,10 @@
 namespace app\models;
 
 use Yii;
+use yii\base\NotSupportedException;
+use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveRecord;
+use yii\web\IdentityInterface;
 
 /**
  * This is the model class for table "users".
@@ -12,73 +16,32 @@ use Yii;
  * @property string $email Почта
  * @property string|null $password Пароль
  * @property int $role Роль
+ * @property string $auth_key
+ * @property string $pass_hash
  *
  * @property Orders[] $orders
- * @property mixed|null $users
  */
-class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
+class Users extends ActiveRecord implements IdentityInterface
 {
     public const ROLE_GUEST = 0;
     public const ROLE_USER = 1;
     public const ROLE_ADMIN = 2;
-    public $authKey;
-    public $accessToken;
+
+
 
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
+    public static function tableName(): string
     {
-        return 'users';
+        return '{{%users}}';
     }
-
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    public static function findIdentity($id)
-    {
-        return isset(self::$users[$id]) ? new static(self::$users[$id]) : null;
-    }
-
-    public static function findIdentityByAccessToken($token, $type = null)
-    {
-        foreach (self::$users as $user) {
-            if ($user['accessToken'] === $token) {
-                return new static($user);
-            }
-        }
-
-        return null;
-    }
-
-    public function getAuthKey()
-    {
-        return $this->authKey;
-    }
-
-    public function validateAuthKey($authKey)
-    {
-        return $this->authKey === $authKey;
-    }
-
-    public function setPassword($password)
-    {
-
-        return sha1($password);
-    }
-
-    public function validatePassword($password)
-    {
-        return $this->password === sha1($password);
-    }
-
-
-    public static function findByEmail($email)
-    {
-        return static::find()->where('email=:email', [":email" => $email])->one();
-    }
+//    public function behaviors()
+//    {
+//        return [
+//            TimestampBehavior::className(),
+//        ];
+//    }
 
     /**
      * {@inheritdoc}
@@ -86,11 +49,9 @@ class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     public function rules()
     {
         return [
-            [['fio', 'email', 'role'], 'required'],
             [['role'], 'integer'],
-            ['rememberMe', 'boolean'],
             [['fio', 'email'], 'string', 'max' => 255],
-            [['password'], 'string', 'max' => 40],
+
         ];
     }
 
@@ -101,27 +62,57 @@ class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     {
         return [
             'id' => 'ID',
-            'fio' => 'Fio',
-            'email' => 'Email',
-            'password' => 'Password',
-            'role' => 'Role',
-            'rememberMe' => 'Remember Me',
-            'authKey' => 'Auth Key',
-            'accessToken' => 'Access Token',
+            'fio' => 'Имя',
+            'email' => 'Почта',
+            'role' => 'Роль',
+            'password' => 'Пароль',
         ];
     }
-
-    public static function findByFio($fio)
+    public static function findIdentity($id)
     {
-        foreach (self::$users as $user) {
-            if (strcasecmp($user['fio'], $fio) === 0) {
-                return new static($user);
-            }
-        }
-
-        return null;
+        return static::findOne($id);
+    }
+    public static function findIdentityByAccessToken($token, $type = null)
+    {
+        throw new NotSupportedException('"findIdentityByAccessToken" is not implemented.');
+    }
+    /**
+     * Finds user by email
+     *
+     * @param string $email
+     * @return static|null
+     */
+    public static function findByEmail($email)
+    {
+        return static::findOne(['email' => $email]);
+    }
+    /**
+     * @inheritdoc
+     */
+    public function getId()
+    {
+        return $this->id;
     }
 
+    public function getAuthKey()
+    {
+        return $this->auth_key;
+    }
+
+    public function validateAuthKey($authKey)
+    {
+        return $this->getAuthKey() === $authKey;
+    }
+    /**
+     * Validates password
+     *
+     * @param string $password password to validate
+     * @return bool if password provided is valid for current user
+     */
+    public function validatePassword($password)
+    {
+        return Yii::$app->security->validatePassword($password, $this->pass_hash);
+    }
     /**
      * Gets query for [[Orders]].
      *
@@ -131,5 +122,21 @@ class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     {
         return $this->hasMany(Orders::class, ['user_id' => 'id']);
     }
+    /**
+     * Generates password hash from password and sets it to the model
+     *
+     * @param string $password
+     */
+    public function setPassword($password): void
+    {
+        $this->pass_hash = Yii::$app->security->generatePasswordHash($password);
+    }
 
+    /**
+     * Generates "remember me" authentication key
+     */
+    public function generateAuthKey()
+    {
+        $this->auth_key = Yii::$app->security->generateRandomString();
+    }
 }

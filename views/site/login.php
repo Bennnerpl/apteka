@@ -27,10 +27,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     'inputOptions' => ['class' => 'col-lg-3 form-control'],
                     'errorOptions' => ['class' => 'col-lg-7 invalid-feedback'],
                 ],
-//                'action' => 'site/login',
             ]); ?>
 
-            <?= $form->field($model, 'username')->textInput(['autofocus' => true])->label('Имя') ?>
+            <?= $form->field($model, 'email')->textInput(['autofocus' => true])->label('Почта') ?>
 
             <?= $form->field($model, 'password')->passwordInput()->label('Пароль') ?>
 

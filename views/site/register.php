@@ -28,12 +28,23 @@ $this->params['breadcrumbs'][] = $this->title;
                     'inputOptions' => ['class' => 'col-lg-3 form-control'],
                     'errorOptions' => ['class' => 'col-lg-7 invalid-feedback'],
                 ],
-                'action' => ['site/register'],
+//                'action' => ['site/register'],
             ]); ?>
 
-            <?= $form->field($model, 'fio')->textInput(['autofocus' => true])->label('Имя') ?>
-            <?= $form->field($model, 'email')->textInput(['type' => 'email'])->label('Почта')  ?>
-            <?= $form->field($model, 'password')->passwordInput()->label('Пароль')  ?>
+<!--            --><?php //= $form->field($model, 'fio')->textInput(['autofocus' => true])->label('Имя') ?>
+<!--            --><?php //= $form->field($model, 'email')->textInput(['type' => 'email'])->label('Почта')  ?>
+<!--            --><?php //= $form->field($model, 'password')->passwordInput()->label('Пароль')  ?>
+
+                        <?= $form->field($model, 'fio')->textInput(['autofocus' => true])->label('Имя') ?>
+            <?= $form->field($model, 'email')->textInput(['autofocus' => true])->label('Email') ?>
+            <?= $form->field($model, 'password')->passwordInput()->label('Пароль') ?>
+            <?=
+            $form->field($model, 'role')->dropDownList([
+                '0' => 'Пользователь',
+                '1' => 'Администратор',
+            ])->label('Выберите роль');
+            ?>
+            <?= $form->field($model, 'repPass')->passwordInput()->label('Повторите пароль') ?>
 
 <!--            --><?php //= $form->field($model, 'repPass')->passwordInput()->label('Повторите пароль')  ?>
             <div class="d-flex flex-row gap-2">

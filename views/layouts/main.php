@@ -23,7 +23,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
-<html lang="<?= Yii::$app->language ?>" class="h-100">
+<html lang="<?= Yii::$app->language = 'ru-RU' ?>" class="h-100">
 <head>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
@@ -48,14 +48,16 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
             ['label' => 'Товары', 'url' => ['/site/products']],
             ['label' => 'Корзина', 'url' => ['/site/cart']],
 //            ['label' => 'Административная панель', 'url' => ['admin/default/index']],
-            Yii::$app->user->id == 100 ?
-                ['label' => 'Административная панель', 'url' => ['/admin/default/index']] : ' ',
+            Yii::$app->user->identity->role == 2 ?
+                ['label' => 'Пользователи', 'url' => ['/admin/users/index']] : ' ',
+            Yii::$app->user->identity->role == 2 ?
+                ['label' => 'Заказы', 'url' => ['/admin/orders/index']] : ' ',
             Yii::$app->user->isGuest
                 ? ['label' => 'Login', 'url' => ['/site/login']]
                 : '<li class="nav-item">'
                 . Html::beginForm(['/site/logout'])
                 . Html::submitButton(
-                    'Logout (' . Yii::$app->user->identity->username . ')',
+                    'Logout (' . Yii::$app->user->identity->email . ')',
                     ['class' => 'nav-link btn btn-link logout']
                 )
                 . Html::endForm()
@@ -79,7 +81,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
 <footer id="footer" class="mt-auto py-3 bg-light">
     <div class="container">
         <div class="row text-muted">
-            <div class="col-md-6 text-center text-md-start">&copy; My Company <?= date('Y') ?></div>
+            <div class="col-md-6 text-center text-md-start">&copy; Аптека <?= date('Y') ?></div>
             <div class="col-md-6 text-center text-md-end"><?= Yii::powered() ?></div>
         </div>
     </div>

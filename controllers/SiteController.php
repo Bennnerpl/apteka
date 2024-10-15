@@ -84,11 +84,12 @@ class SiteController extends Controller
         }
 
         $model = new LoginForm();
+
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
+            return $this->goHome();
         }
 
-//        $model->password = '';
+        $model->password = '';
         return $this->render('login', [
             'model' => $model,
         ]);
@@ -142,7 +143,11 @@ class SiteController extends Controller
         $checkout = new Orders();
         return $this->render('checkout', ['checkout' => $checkout]);
     }
-
+    /**
+     * registration action.
+     *
+     * @return Response|string
+     */
     public function actionRegister()
     {
         if (!Yii::$app->user->isGuest) {
@@ -150,13 +155,12 @@ class SiteController extends Controller
         }
         Yii::$app->response->cookies->add(new \yii\web\Cookie([
             'name' => 'language',
-            'value' => 'zh-CN',
+            'value' => 'ru-RU',
         ]));
         $model = new RegisterForm();
-        $model->role = Users::ROLE_USER;
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->getSession()->setFlash('success');
-            return $this->redirect(['index']);
+
+        if ($model->load(Yii::$app->request->post()) && $model->registration()) {
+            return $this->goBack();
 
         } else {
             return $this->render('register', [
@@ -164,5 +168,23 @@ class SiteController extends Controller
             ]);
         }
     }
+//    public function actionRegister()
+//    {
+//        if (!Yii::$app->user->isGuest) {
+//            return $this->goBack();
+//        }
+//        Yii::$app->response->cookies->add(new \yii\web\Cookie([
+//            'name' => 'language',
+//            'value' => 'ru-RU',
+//        ]));
+//        $model = new RegisterForm();
+//        if ($model->load(Yii::$app->request->post()) && $model->register()) {
+//            return $this->redirect(['index']);
+//        }
+//
+//        return $this->render('register', [
+//            'model' => $model,
+//        ]);
+//    }
 
 }
