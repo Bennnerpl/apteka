@@ -15,7 +15,7 @@ use Yii;
  * @property Orders $order
  * @property Products $orderProduct
  */
-class OrderItems// need define as array extends \yii\db\ActiveRecord
+class OrderItems extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
@@ -69,4 +69,5 @@ class OrderItems// need define as array extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Products::class, ['id' => 'order_product_id']);
     }
+
 }

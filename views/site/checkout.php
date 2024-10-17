@@ -7,9 +7,10 @@ use app\models\Products;
 use app\models\Cart;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
-
+use app\controllers\OrderController;
 /** @var app\models\Users $users */
 //$users = Users::$fio;
+/** @var $model */
 ?>
 
 <div class="col-sm-9">
@@ -17,7 +18,7 @@ use yii\widgets\ActiveForm;
     <?php $formOrder = ActiveForm::begin([
             'id' => 'form-order',
         'method' => 'post',
-        'action' => ['site/order'],
+//        'action' => ['site/order'],
 
     ])?>
     <table class="table">
@@ -35,6 +36,8 @@ use yii\widgets\ActiveForm;
         $i = 1;
         $cart = Yii::$app->session['cart'];
         ?>
+<!--        --><?php //= $formOrder->field($model, 'user_id')->textInput() ?>
+<!--        --><?php //= $formOrder->field($model, 'date')->textInput() ?>
         <?php foreach ($cart as $item ): ?>
             <tr id="<?= $item['id']?>">
                 <th scope="row"> <?= $i++; ?></th>

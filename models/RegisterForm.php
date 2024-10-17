@@ -61,20 +61,7 @@ class RegisterForm extends Model
     }
     public function registration()
     {
-//        if ($this->validate()) {
-//            $user = new Users();
-//            $user->email = $this->email;
-//            $user->password = $user->setPassword($this->password);
-//            $user->role = Users::ROLE_USER;
-//            $user->save();
-//            if ($user->save()) {
-//                \Yii::$app->user->login($this->getUser(), 3600*24*30);
-//                \Yii::$app->getSession()->setFlash('success', 'Вы успешно зарегистрированы.');
-//                return true;
-//            }
-//            return false;
-//        }
-//        return false;
+
         if (!$this->validate()) {
             return null;
         }

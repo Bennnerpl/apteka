@@ -31,7 +31,13 @@ $this->params['breadcrumbs'][] = $this->title;
             'fio',
             'email:email',
             'password',
-            'role',
+            [
+                    'attribute' => 'role',
+                    'label' => 'Роль',
+                    'value' => function ($model) {
+                        return $model->role == 2 ? 'Администратор' : 'Пользователь';
+                    }
+            ],
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, UsersSearch $model, $key, $index, $column) {

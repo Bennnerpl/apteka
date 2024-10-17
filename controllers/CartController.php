@@ -33,10 +33,4 @@ class CartController extends Controller
         return $this->redirect(['site/cart']);
     }
 
-    public function actionCheckout()
-    {
-        $id = Yii::$app->request->post('id');
-        $quantity = Yii::$app->request->post('quantity');
-        return $this->render('site/checkout');
-    }
 }

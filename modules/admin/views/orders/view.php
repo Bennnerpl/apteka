@@ -2,11 +2,12 @@
 
 use app\models\Products;
 use app\modules\admin\models\OrderItems;
+use app\modules\admin\models\Orders;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /** @var yii\web\View $this */
-/** @var app\modules\admin\models\Order $model */
+/** @var app\modules\admin\models\Orders $model */
 
 $this->title = $model->id;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Заказы'), 'url' => ['index']];
@@ -25,20 +26,26 @@ $this->params['breadcrumbs'][] = $this->title;
 //            ],
 //        ]) ?>
 <!--    </p>-->
+
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
             'id',
             'user_id',
             'date',
+            [
+                'label' => 'Название продукта',
+                'value' => $model->orderItems, // Получаем название продукта
+            ],
         ],
     ]) ?>
     <?php
 //    $products = OrderItems::findOne(['order_id' => $model->id]);
 //    $productsItems = Products::findOne(['id' => $products->id]);
 //    $products = Products::findOne(['id' => $model->id]);
-    $products = Products::findAll(['id' => $model->id]);
-    $productsDetail = OrderItems::findOne(['order_id' => $model->id]);
+//    $products = Products::findAll(['order_product_id' => $model->id]);
+//    $productsDetail = OrderItems::findOne(['order_id' => $model->id]);
+
     $subtotal = 0;
     ?>
     <table class="table table-bordered table-striped">
@@ -70,4 +77,6 @@ $this->params['breadcrumbs'][] = $this->title;
     </table>
 <?php //print_r($products);?>
 <!--    --><?php //print_r($productsDetail);?>
+    <?php print_r($model);?>
+
 </div>

@@ -2,7 +2,8 @@
 
 namespace app\modules\admin\controllers;
 
-use app\modules\admin\models\Order;
+//use app\models\Orders;
+use app\modules\admin\models\Orders;
 use yii\data\ActiveDataProvider;
 use app\modules\admin\controllers\DefaultController;
 use yii\web\NotFoundHttpException;
@@ -39,7 +40,7 @@ class OrderController extends DefaultController
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => Order::find(),
+            'query' => Orders::findOne(),
             /*
             'pagination' => [
                 'pageSize' => 50
@@ -77,8 +78,8 @@ class OrderController extends DefaultController
      */
     public function actionCreate()
     {
-        $model = new Order();
-
+        $model = new Orders();
+        $orderItems = $model->orderItems;
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
@@ -89,6 +90,7 @@ class OrderController extends DefaultController
 
         return $this->render('view', [
             'model' => $model,
+            'orderItems' => $orderItems,
         ]);
     }
 
@@ -130,13 +132,13 @@ class OrderController extends DefaultController
      * Finds the Order model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param int $id ID
-     * @return Order the loaded model
+     * @return Orders the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      * @property findModel
      */
     protected function findModel($id)
     {
-        if (($model = Order::findOne(['id' => $id])) !== null) {
+        if (($model = Orders::findOne(['id' => $id])) !== null) {
             return $model;
         }
 

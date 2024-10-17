@@ -2,6 +2,7 @@
 
 namespace app\modules\admin\models;
 
+use app\models\Users;
 use Yii;
 
 /**
@@ -11,7 +12,7 @@ use Yii;
  * @property int|null $user_id id пользователя
  * @property string $date Дата заказа
  *
- * @property OrderItems[] $orderItems
+ * @property OrderItems $orderItems
  * @property Users $user
  */
 class Orders extends \yii\db\ActiveRecord
@@ -47,6 +48,7 @@ class Orders extends \yii\db\ActiveRecord
             'id' => 'ID',
             'user_id' => 'User ID',
             'date' => 'Date',
+
         ];
     }
 

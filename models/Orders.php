@@ -16,6 +16,9 @@ use Yii;
  */
 class Orders extends \yii\db\ActiveRecord
 {
+
+//    public const SEND = 1;
+//    public const NOT_SEND = 0;
     /**
      * {@inheritdoc}
      */
@@ -69,4 +72,6 @@ class Orders extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Users::class, ['id' => 'user_id']);
     }
+
+
 }

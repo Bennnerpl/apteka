@@ -138,11 +138,6 @@ class SiteController extends Controller
         return $this->render('cart', ['cart' => $cart]);
     }
 
-    public function actionCheckout()
-    {
-        $checkout = new Orders();
-        return $this->render('checkout', ['checkout' => $checkout]);
-    }
     /**
      * registration action.
      *
@@ -168,23 +163,36 @@ class SiteController extends Controller
             ]);
         }
     }
-//    public function actionRegister()
-//    {
-//        if (!Yii::$app->user->isGuest) {
-//            return $this->goBack();
-//        }
-//        Yii::$app->response->cookies->add(new \yii\web\Cookie([
-//            'name' => 'language',
-//            'value' => 'ru-RU',
-//        ]));
-//        $model = new RegisterForm();
-//        if ($model->load(Yii::$app->request->post()) && $model->register()) {
-//            return $this->redirect(['index']);
-//        }
-//
-//        return $this->render('register', [
-//            'model' => $model,
-//        ]);
-//    }
+
+    public function actionCheckout()
+    {
+        $model = new Orders();
+        $orderItems = Yii::$app->session->get('cart', []); // Получаем корзину из сессии
+
+        if (Yii::$app->request->isPost) {
+            $model->user_id = Yii::$app->user->id; // Устанавливаем id пользователя
+            $model->date = date('Y-m-d H:i:s'); // Устанавливаем дату заказа
+
+            if ($model->save()) {
+                foreach ($orderItems as $item) {
+                    $orderItem = new OrderItems();
+                    $orderItem->order_id = $model->id;
+                    $orderItem->order_product_id= $item['id'];
+                    $orderItem->quantity = $item['quantity'];
+                    $orderItem->save();
+                }
+
+                // Очищаем корзину после оформления заказа
+                Yii::$app->session->remove('cart');
+
+                return $this->redirect(['checkout', 'id' => $model->id]);
+            }
+        }
+
+        return $this->render('checkout', [
+            'model' => $model,
+            'orderItems' => $orderItems,
+        ]);
+    }
 
 }
